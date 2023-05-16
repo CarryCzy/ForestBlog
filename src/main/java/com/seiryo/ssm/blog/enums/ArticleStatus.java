@@ -7,6 +7,7 @@ package com.seiryo.ssm.blog.enums;
 
 public enum ArticleStatus {
 
+
     PUBLISH(1, "已发布"),
     DRAFT(0, "草稿");
 

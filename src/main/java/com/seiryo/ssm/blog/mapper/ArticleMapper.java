@@ -18,9 +18,12 @@ public interface ArticleMapper {
     /**
      * 根据ID删除
      *
-     * @param articleId 文章ID
-     * @return 影响函数
+     * @param id 文章ID
+     * @return 影响行数
      */
+    default Integer deleteById(Integer id) {
+        return null;
+    }
 
     /**
      * 添加文章
@@ -28,6 +31,7 @@ public interface ArticleMapper {
      * @param article 文章
      * @return 文章
      */
+    Article insert(@Param("article") Article article);
 
     /**
      * 更新文章
@@ -35,14 +39,14 @@ public interface ArticleMapper {
      * @param article 文章
      * @return 影响行数
      */
-
+    Integer update(Article article);
     /**
      * 获得所有的文章
      *
      * @param criteria 查询条件
      * @return 文章列表
      */
-
+    List<Article> findAll(HashMap<String, Object> criteria);
     /**
      * 文章归档
      * @return
@@ -56,18 +60,19 @@ public interface ArticleMapper {
      * @return 数量
      */
 
+    Integer countArticle(Integer status);
     /**
      * 获得留言总数
      *
      * @return 数量
      */
-
+    Integer countArticleComment();
     /**
      * 获得浏览量总数
      *
      * @return 文章数量
      */
-
+    Integer countArticleView();
     /**
      * 获得所有文章(文章归档)
      *
@@ -76,13 +81,13 @@ public interface ArticleMapper {
     List<Article> listArticle();
 
     /**
-     * 根据id查询用户信息
+     * 根据id查询文章
      *
      * @param status 状态
      * @param id 文章ID
      * @return 文章
      */
-
+    Article getArticleByStatusAndId(@Param("status") Integer status,@Param("id") Integer id);
     /**
      * 分页操作
      *
@@ -93,8 +98,8 @@ public interface ArticleMapper {
      */
     @Deprecated
     List<Article> pageArticle(@Param(value = "status") Integer status,
-                                    @Param(value = "pageIndex") Integer pageIndex,
-                                    @Param(value = "pageSize") Integer pageSize);
+                              @Param(value = "pageIndex") Integer pageIndex,
+                              @Param(value = "pageSize") Integer pageSize);
 
 
     /**
@@ -103,20 +108,21 @@ public interface ArticleMapper {
      * @param limit 查询数量
      * @return 文章列表
      */
-
+    List<Article> listArticleByViewCount(@Param("limit") Integer limit);
     /**
      * 获得上一篇文章
      *
      * @param id 文章ID
      * @return 文章
      */
-
+    Article getPreArticle(@Param("id")Integer id);
     /**
      * 获得下一篇文章
      *
      * @param id 文章ID
      * @return 文章
      */
+    Article getAfterArticle(@Param("id") Integer id);
 
     /**
      * 获得随机文章
@@ -124,20 +130,21 @@ public interface ArticleMapper {
      * @param limit 查询数量
      * @return 文章列表
      */
-
+    List<Article> listRandomArticle(@Param("limit") Integer limit);
     /**
      * 热评文章
      *
      * @param limit  查询数量
      * @return 文章列表
      */
+    List<Article> listArticleByCommentCount(@Param("limit")Integer limit);
 
     /**
      * 更新文章的评论数
      *
      * @param articleId 文章ID
      */
-
+    void updateCommentCount(@Param("articleId") Integer articleId);
     /**
      * 获得最后更新的记录
      *
@@ -179,6 +186,7 @@ public interface ArticleMapper {
      * @param limit 查询数量
      * @return 列表
      */
+
     List<Article> listArticleByLimit(Integer limit);
 
     /**
@@ -187,5 +195,5 @@ public interface ArticleMapper {
      * @param ids 文章Id列表
      * @return 影响行数
      */
-
+    Integer deleteBatch(List<Integer> ids);
 }
