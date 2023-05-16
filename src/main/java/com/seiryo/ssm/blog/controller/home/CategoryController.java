@@ -12,6 +12,7 @@ import com.seiryo.ssm.blog.entity.Tag;
 import com.seiryo.ssm.blog.service.ArticleService;
 import com.seiryo.ssm.blog.service.CategoryService;
 import com.seiryo.ssm.blog.service.TagService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,12 +52,28 @@ public class CategoryController {
                                            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                            Model model) {
         //该分类信息
+        Category category = categoryService.getCategoryById(cateId);
+        model.addAttribute("category",category);
         //文章列表
+        HashMap<String, Object> criteria = new HashMap<>(2);
+        criteria.put("categoryId", cateId);
+        //保证都是可读
+        criteria.put("status", ArticleStatus.PUBLISH.getValue());
+        PageInfo<Article> articlePageInfo = articleService.pageArticle(pageIndex, pageSize, criteria);
+        model.addAttribute("pageInfo", articlePageInfo);
+
         //侧边栏
         //标签列表显示
+        List<Tag> allTagList = tagService.listTag();
+        model.addAttribute("allTagList", allTagList);
         //获得随机文章
+        List<Article> randomArticleList = articleService.listRandomArticle(8);
+        model.addAttribute("randomArticleList", randomArticleList);
         //获得热评文章
-        return null;
+        List<Article> mostCommentArticleList = articleService.listArticleByCommentCount(8);
+        model.addAttribute("mostCommentArticleList", mostCommentArticleList);
+        model.addAttribute("pageUrlPrefix", "/category/"+cateId+"?pageIndex");
+        return "Home/Page/articleListByCategory";
     }
 
 
